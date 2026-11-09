@@ -1,0 +1,19 @@
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Synology NAS metadata
+@eaDir/
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Build/Temp (if any)
+node_modules/
+dist/
+build/
