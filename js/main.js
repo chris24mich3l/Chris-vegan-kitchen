@@ -10,6 +10,8 @@ function getSystemPrefersDark() {
 function applyDarkMode(enabled) {
     document.documentElement.classList.toggle('dark-mode', enabled);
     document.body.classList.toggle('dark-mode', enabled);
+    // Explicitly set body background so it always changes (not just CSS vars on html)
+    document.body.style.backgroundColor = enabled ? '#1A1410' : '';
     // Update toggle button icon
     const toggle = document.querySelector('.dark-toggle');
     if (toggle) {
@@ -20,9 +22,10 @@ function applyDarkMode(enabled) {
 function initDarkMode() {
     const stored = localStorage.getItem(DARK_MODE_KEY);
 
-    // Create toggle button once
+    // Find or create toggle button
     let toggle = document.querySelector('.dark-toggle');
     if (!toggle) {
+        // Button missing from page — inject it into the sticky nav
         toggle = document.createElement('button');
         toggle.className = 'dark-toggle';
         toggle.setAttribute('aria-label', 'Toggle dark mode');
@@ -34,15 +37,27 @@ function initDarkMode() {
             <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
             </svg>`;
-        toggle.addEventListener('click', function () {
-            const isEnabled = document.documentElement.classList.contains('dark-mode');
-            const newState = !isEnabled;
-            applyDarkMode(newState);
-            localStorage.setItem(DARK_MODE_KEY, newState ? 'true' : 'false');
-        });
-        // Insert before the body close
-        document.body.appendChild(toggle);
+        // Place it inside the existing sticky nav
+        const nav = document.querySelector('.sticky-nav');
+        if (nav) {
+            nav.appendChild(toggle);
+        } else {
+            document.body.appendChild(toggle);
+        }
     }
+
+    // Re-attach click handler (idempotent — safe to call multiple times)
+    // Remove any existing listeners by cloning (preserves attributes)
+    const newToggle = toggle.cloneNode(true);
+    toggle.parentNode.replaceChild(newToggle, toggle);
+
+    // Always attach the click handler
+    newToggle.addEventListener('click', function () {
+        const isEnabled = document.documentElement.classList.contains('dark-mode');
+        const newState = !isEnabled;
+        applyDarkMode(newState);
+        localStorage.setItem(DARK_MODE_KEY, newState ? 'true' : 'false');
+    });
 
     // Determine initial state
     let useDark;
@@ -86,13 +101,13 @@ function revealOnScroll() {
 // Sticky Nav Active State based on scroll
 function updateNavState() {
     const navLinks = document.querySelectorAll('.sticky-nav a');
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
 
     navLinks.forEach(link => {
         const linkHref = link.getAttribute('href');
         link.classList.remove('active');
 
-        if (linkHref === currentPage) {
+        if (linkHref === currentPath) {
             link.classList.add('active');
         }
     });
