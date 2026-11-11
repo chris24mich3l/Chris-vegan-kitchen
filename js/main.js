@@ -101,13 +101,21 @@ function revealOnScroll() {
 // Sticky Nav Active State based on scroll
 function updateNavState() {
     const navLinks = document.querySelectorAll('.sticky-nav a');
-    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+    const pathname = window.location.pathname;
+    // Get the file name from the pathname (works for both http:// and file:// URLs):
+    //   "/index.html" or "file:///path/to/index.html" → "index.html"
+    //   "/about.html" or "file:///path/to/about.html"  → "about.html"
+    //   "/" or "file:///path/to/"                        → "index.html"
+    const segments = pathname.split('/').filter(Boolean);
+    const fileName = segments.length ? segments[segments.length - 1] : 'index.html';
+    // Always work with the .html version for comparison
+    let pageName = fileName.endsWith('.html') ? fileName : fileName + '.html';
 
     navLinks.forEach(link => {
         const linkHref = link.getAttribute('href');
         link.classList.remove('active');
 
-        if (linkHref === currentPath) {
+        if (linkHref === pageName || linkHref === pageName.replace('.html', '')) {
             link.classList.add('active');
         }
     });
