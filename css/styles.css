@@ -58,45 +58,10 @@
     --duration: 0.3s;
 }
 
-/* --- Dark Mode Variables --- */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg: #1A1410;
-        --bg-alt: #231C16;
-        --surface: #261F19;
-        --surface-hover: #2F261F;
-
-        --pink-50: #2D1218;
-        --pink-100: #3F1520;
-        --pink-200: #551A2A;
-        --pink-300: #E8637B;
-        --pink-400: #F28AA0;
-        --pink-500: #F43F5E;
-        --pink-600: #FB7185;
-        --pink-700: #F43F5E;
-
-        --text: #F0E6D8;
-        --text-muted: #B8A498;
-        --text-light: #8A7668;
-        --border: rgba(240, 230, 216, 0.08);
-        --border-strong: rgba(240, 230, 216, 0.15);
-
-        --gold: #E8C08A;
-        --gold-light: #3D2E22;
-        --green: #7CB89A;
-        --green-light: #1A3328;
-        --purple: #B08EE8;
-        --purple-light: #2A1E3A;
-
-        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.15);
-        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.15);
-        --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
-        --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.2);
-    }
-}
-
-/* Manual dark mode (when user toggles via JS) */
-.dark-mode {
+/* Manual dark mode override — redefine variables via html.dark-mode.
+   The JS initDarkMode() handles system preference detection initially,
+   and the .dark-mode class controls all dark/light mode switching. */
+html.dark-mode {
     --bg: #1A1410;
     --bg-alt: #231C16;
     --surface: #261F19;
@@ -130,25 +95,113 @@
     --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Apply explicit background and color to body and container in dark mode
-   so transitions work across all browsers (CSS variable changes don't always animate) */
-.dark-mode body {
-    background-color: #1A1410;
-    color: #F0E6D8;
+/* === Explicit dark-mode overrides for every page section ===
+    These guarantee colors update regardless of CSS variable
+    resolution timing or browser quirks. */
+
+/* Page background */
+html.dark-mode body {
+    background-color: #1A1410 !important;
+    color: #F0E6D8 !important;
 }
 
-.dark-mode .container {
-    color: #F0E6D8;
+/* Container (wrapper for all page content) */
+html.dark-mode .container {
+    background-color: #1A1410 !important;
+    color: #F0E6D8 !important;
 }
 
-/* Dark mode sticky nav override */
-.dark-mode .sticky-nav {
+/* Sticky nav */
+html.dark-mode .sticky-nav {
     background: rgba(26, 20, 16, 0.85);
 }
 
-/* Dark mode site header decorative blob */
-.dark-mode .site-header::before {
+/* Site header decorative blob */
+html.dark-mode .site-header::before {
     background: radial-gradient(circle, #551A2A 0%, transparent 70%);
+}
+
+/* Content sections (cards, tables, etc.) */
+html.dark-mode .content-section,
+html.dark-mode .faq-answer {
+    background-color: #261F19 !important;
+}
+
+/* Stat items */
+html.dark-mode .stat-item {
+    background: linear-gradient(135deg, #1A1410 0%, #231C16 100%) !important;
+}
+
+/* Flavor cards */
+html.dark-mode .flavor-card {
+    background-color: #1A1410 !important;
+}
+
+/* Sourdough section */
+html.dark-mode .sourdough-section {
+    background-color: #1A1410 !important;
+}
+
+/* Delivery options */
+html.dark-mode .delivery-option {
+    background-color: #1A1410 !important;
+}
+
+/* Thank you section */
+html.dark-mode .thank-you-section {
+    background: linear-gradient(135deg, #1A1410 0%, #231C16 100%) !important;
+}
+
+/* Certifications */
+html.dark-mode .certifications {
+    background-color: #1A1410 !important;
+}
+
+/* Quick links */
+html.dark-mode .quick-link {
+    background-color: #261F19 !important;
+}
+
+/* Link cards */
+html.dark-mode .link-card {
+    background-color: #261F19 !important;
+}
+
+/* Social links */
+html.dark-mode .social-link {
+    background-color: #1A1410 !important;
+    border-color: rgba(240, 230, 216, 0.08);
+}
+
+/* Footer */
+html.dark-mode .footer {
+    color: #8A7668 !important;
+}
+
+/* FAQ question text */
+html.dark-mode .faq-question {
+    color: #F0E6D8 !important;
+}
+
+/* Signature */
+html.dark-mode .signature {
+    color: #FB7185 !important;
+}
+
+/* FAQ answer text */
+html.dark-mode .faq-answer p {
+    color: #B8A498 !important;
+}
+
+/* Logo circle border */
+html.dark-mode .logo-circle {
+    border-color: #551A2A;
+}
+
+/* Location badge */
+html.dark-mode .location-badge {
+    background: #2D1218;
+    border-color: #551A2A;
 }
 
 /* --- Dark Mode Transition --- */
